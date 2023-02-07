@@ -138,8 +138,6 @@ module Danger
       message << "| --- | ----- | ----- |\n"
 
       results.each do |r|
-        puts r
-
         filename = r['location']['file'].split('/').last(2).join("/")
         line = r['location']['line']
         reason = r['reason']
@@ -166,7 +164,7 @@ module Danger
         message << "`#{r['ruleIdentifier']}`"
         message << " `#{filename}:#{r['location']['line']}`" # file:line for pasting into Xcode Quick Open
 
-        send(method, message, file: github_filename, line: r['line'])
+        send(method, message, file: github_filename, line: r['location']['line'])
       end
     end
 
