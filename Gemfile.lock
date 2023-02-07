@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    danger-l10nlint (0.0.6)
+    danger-l10nlint (0.0.7)
       danger-plugin-api (~> 1.0)
 
 GEM
