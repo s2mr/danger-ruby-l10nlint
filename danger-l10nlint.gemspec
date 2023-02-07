@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.version       = DangerL10nLint::VERSION
   spec.authors       = ["Kazumasa Shimomura"]
   spec.email         = ["kazu.devapp@gmail.com"]
-  spec.description   = "A short description of danger-l10nlint."
-  spec.summary       = "A longer description of danger-l10nlint."
-  spec.homepage      = "https://github.com/s2mr/danger-l10nlint"
+  spec.description   = "A Danger plugin for linting Localizable.strings with L10nLint.  "
+  spec.summary       = ""
+  spec.homepage      = "https://github.com/s2mr/danger-ruby-l10nlint"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
