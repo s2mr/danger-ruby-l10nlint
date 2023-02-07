@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("lib", __dir__)
+lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "l10nlint/gem_version"
+require 'version'
 
 Gem::Specification.new do |spec|
   spec.name          = "danger-l10nlint"
-  spec.version       = L10nlint::VERSION
+  spec.version       = DangerL10nLint::VERSION
   spec.authors       = ["Kazumasa Shimomura"]
   spec.email         = ["kazu.devapp@gmail.com"]
   spec.description   = "A short description of danger-l10nlint."

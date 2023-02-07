@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+if $PROGRAM_NAME == __FILE__
+    $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+end
+
+require 'thor'
+require 'version'
+
+class DangerL10nLintCLI < Thor
+    desc 'version', 'The version of the installed danger-l10nlint plugin'
+    def version
+        puts DangerL10nLint::VERSION
+    end
+
+    desc 'l10nlint_version', 'The L10nLint version used by the plugin'
+    def l10nlint_version
+        puts DangerL10nLint::L10NLINT_VERSION
+    end
+end
+
+DangerL10nLintCLI.start(ARGV)
