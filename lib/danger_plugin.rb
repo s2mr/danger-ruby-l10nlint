@@ -161,7 +161,7 @@ module Danger
         message = "#{r['reason']}".dup
 
         # extended content here
-        filename = r['location']['file'].split('/').last
+        filename = r['location']['file'].split('/').last(2).join("/")
         message << "\n"
         message << "`#{r['ruleIdentifier']}`"
         message << " `#{filename}:#{r['location']['line']}`" # file:line for pasting into Xcode Quick Open
