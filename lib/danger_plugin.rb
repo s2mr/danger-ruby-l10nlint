@@ -23,28 +23,40 @@ module Danger
   #
   class DangerL10nlint < Plugin
     # The path to L10nLint's execution
+    # @return [String] binary_path
     attr_accessor :binary_path
 
     # The path to L10nLint's configuration file
+    # @return [String] config_file
     attr_accessor :config_file
 
     # Maximum number of issues to be reported.
+    # @return [Integer] max_num_violations
     attr_accessor :max_num_violations
 
     # Provides additional logging diagnostic information.
+    # @return [Boolean] verbose
     attr_accessor :verbose
 
     # Whether we should fail on warnings
+    # @return [Boolean] strict
     attr_accessor :strict
 
     # Warnings found
+    # @return [Array<Hash>] warnings
     attr_accessor :warnings
 
     # Errors found
+    # @return [Array<Hash>] errors
     attr_accessor :errors
 
     # All issues found
+    # @return [Array<Hash>] issues
     attr_accessor :issues
+
+    # Rules for not wanting to make inline comments
+    # @return [Array<String>] rule identifiers
+    attr_accessor :inline_except_rules
 
     # Lints Localizable.strings
     # @return [void]
@@ -76,17 +88,35 @@ module Danger
         other_issues_count = issues.count - @max_num_violations if issues.count > @max_num_violations
         issues = issues.take(@max_num_violations)
       end
-      log "Received from L10nLint: #{issues}"
+
+      log "Received issues from L10nLint: #{issues.count}"
 
       # Filter warnings and errors
       @warnings = issues.select { |issue| issue['severity'] == 'warning' }
       @errors = issues.select { |issue| issue['severity'] == 'error' }
 
       if inline_mode
+        # Separate each warnings and errors by inline_except_rules
+        if inline_except_rules
+          markdown_warnings = warnings.select { |issue| inline_except_rules.include?(issue['ruleIdentifier']) }
+          inline_warnings = warnings - markdown_warnings
+          markdown_errors = @errors.select { |issue| inline_except_rules.include?(issue['ruleIdentifier']) }
+          inline_errors = @errors - markdown_errors
+        end
+
         # Report with inline comment
-        send_inline_comment(warnings, strict ? :fail : :warn)
-        send_inline_comment(errors, (fail_on_error || strict) ? :fail : :warn)
+        send_inline_comment(inline_warnings, strict ? :fail : :warn)
+        send_inline_comment(inline_errors, (fail_on_error || strict) ? :fail : :warn)
+
+        if markdown_warnings.count > 0 || markdown_errors.count > 0
+          message = "### L10nLint found issues\n\n".dup
+          message << markdown_issues(markdown_warnings, 'Warnings') unless markdown_warnings.empty?
+          message << markdown_issues(markdown_errors, 'Errors') unless markdown_errors.empty?
+          markdown message
+        end
+
         warn other_issues_message(other_issues_count) if other_issues_count > 0
+
       elsif warnings.count > 0 || errors.count > 0
         # Report if any warning or error
         message = "### L10nLint found issues\n\n".dup
