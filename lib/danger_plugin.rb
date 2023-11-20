@@ -49,7 +49,7 @@ module Danger
     # Lints Localizable.strings
     # @return [void]
     #
-    def lint_files(inline_mode: false, fail_on_error: false, additional_l10nlint_args: '')
+    def lint_files(inline_mode: false, fail_on_error: false, additional_l10nlint_args: '', subtitle: '')
       raise 'l10nlint is not installed' unless l10nlint.installed?
 
       config_file_path = config_file
@@ -89,7 +89,8 @@ module Danger
         warn other_issues_message(other_issues_count) if other_issues_count > 0
       elsif warnings.count > 0 || errors.count > 0
         # Report if any warning or error
-        message = "### L10nLint found issues\n\n".dup
+        subtitle_in_title = subtitle.empty? '' : "(#{subtitle})"
+        message = "### L10nLint found issues #{subtitle_in_title}\n\n".dup
         message << markdown_issues(warnings, 'Warnings') unless warnings.empty?
         message << markdown_issues(errors, 'Errors') unless errors.empty?
         message << "\n#{other_issues_message(other_issues_count)}" if other_issues_count > 0
