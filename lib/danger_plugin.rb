@@ -119,7 +119,7 @@ module Danger
 
       elsif warnings.count > 0 || errors.count > 0
         # Report if any warning or error
-        subtitle_in_title = subtitle.empty? '' : "(#{subtitle})"
+        subtitle_in_title = subtitle.empty? ? '' : "(#{subtitle})"
         message = "### L10nLint found issues #{subtitle_in_title}\n\n".dup
         message << markdown_issues(warnings, 'Warnings') unless warnings.empty?
         message << markdown_issues(errors, 'Errors') unless errors.empty?
