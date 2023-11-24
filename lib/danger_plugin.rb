@@ -95,6 +95,7 @@ module Danger
       @warnings = issues.select { |issue| issue['severity'] == 'warning' }
       @errors = issues.select { |issue| issue['severity'] == 'error' }
 
+      subtitle_in_title = subtitle.empty? ? '' : "(#{subtitle})"
       if inline_mode
         # Separate each warnings and errors by inline_except_rules
         if inline_except_rules
@@ -109,7 +110,7 @@ module Danger
         send_inline_comment(inline_errors, (fail_on_error || strict) ? :fail : :warn)
 
         if markdown_warnings.count > 0 || markdown_errors.count > 0
-          message = "### L10nLint found issues\n\n".dup
+          message = "### L10nLint found issues #{subtitle_in_title}\n\n".dup
           message << markdown_issues(markdown_warnings, 'Warnings') unless markdown_warnings.empty?
           message << markdown_issues(markdown_errors, 'Errors') unless markdown_errors.empty?
           markdown message
@@ -119,7 +120,6 @@ module Danger
 
       elsif warnings.count > 0 || errors.count > 0
         # Report if any warning or error
-        subtitle_in_title = subtitle.empty? ? '' : "(#{subtitle})"
         message = "### L10nLint found issues #{subtitle_in_title}\n\n".dup
         message << markdown_issues(warnings, 'Warnings') unless warnings.empty?
         message << markdown_issues(errors, 'Errors') unless errors.empty?
